@@ -62,5 +62,37 @@ def get_external_product(barcode):
     return jsonify(product)
 
 
+@app.route("/inventory", methods=["POST"])
+def add_inventory_item():
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "error": "Request body is required"
+        }), 400
+
+    required_fields = ["name", "barcode", "quantity", "price"]
+
+    for field in required_fields:
+        if field not in data:
+            return jsonify({
+                "error": f"Missing required field: {field}"
+            }), 400
+
+    new_id = max([item["id"] for item in inventory], default=0) + 1
+
+    new_item = {
+        "id": new_id,
+        "name": data["name"],
+        "barcode": data["barcode"],
+        "quantity": data["quantity"],
+        "price": data["price"]
+    }
+
+    inventory.append(new_item)
+
+    return jsonify(new_item), 201
+
+
 if __name__ == "__main__":
     app.run(debug=True)
