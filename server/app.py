@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request
 
-from external_api import get_product_by_barcode
+from .external_api import get_product_by_barcode
 
-from models import (
+from .models import (
     initialize_database,
     get_all_items,
     get_item,
@@ -12,7 +12,6 @@ from models import (
 )
 
 app = Flask(__name__)
-
 
 initialize_database()
 
