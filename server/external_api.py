@@ -1,11 +1,11 @@
 import requests
 
 
-BASE_URL = "https://world.openfoodfacts.org/api/v3.6/product"
+BASE_URL = "https://world.openfoodfacts.org/api/v3/product"
 
 
 def get_product_by_barcode(barcode):
-    url = f"{BASE_URL}/{barcode}.json"
+    url = f"{BASE_URL}/{barcode}"
 
     response = requests.get(
         url,
@@ -19,8 +19,5 @@ def get_product_by_barcode(barcode):
         return None
 
     data = response.json()
-
-    if data.get("status") != 1:
-        return None
 
     return data.get("product")
