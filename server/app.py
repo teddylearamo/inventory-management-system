@@ -94,5 +94,34 @@ def add_inventory_item():
     return jsonify(new_item), 201
 
 
+@app.route("/inventory/<int:item_id>", methods=["PUT"])
+def update_inventory_item(item_id):
+    item = next(
+        (item for item in inventory if item["id"] == item_id),
+        None
+    )
+
+    if item is None:
+        return jsonify({
+            "error": "Inventory item not found"
+        }), 404
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "error": "Request body is required"
+        }), 400
+
+    allowed_fields = ["name", "barcode", "quantity", "price"]
+
+    for field in allowed_fields:
+        if field in data:
+            item[field] = data[field]
+
+    return jsonify(item)
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
